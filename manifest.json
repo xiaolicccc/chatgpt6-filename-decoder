@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "中文下载文件名自动解码",
+  "version": "1.0.0",
+  "description": "自动还原百分号编码的 UTF-8 中文下载文件名（如 %E4%B8...），不修改文件内容。",
+  "permissions": ["downloads"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "minimum_chrome_version": "100"
+}
