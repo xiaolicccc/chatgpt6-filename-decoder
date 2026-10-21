@@ -1,5 +1,7 @@
 # ChatGPT Filename Decoder
 
+**[下载最新版 / Download latest release](https://github.com/xiaolicccc/chatgpt6-filename-decoder/releases/latest)**
+
 [中文说明](#中文说明) | [English](#english)
 
 A minimal Chrome extension that fixes percent-encoded UTF-8 download filenames, including filenames from ChatGPT such as `%E4%B8%93%E5%88%A9.docx`.
@@ -34,17 +36,23 @@ A minimal Chrome extension that fixes percent-encoded UTF-8 download filenames, 
 - **仅影响安装后新发起的下载，不会处理历史文件。**
 - **不能修复 ChatGPT 网页中的文件预览标题乱码**；此版本只处理浏览器保存文件时的名称。
 - 监听所有 Chrome 下载任务，并非只对 ChatGPT 生效。
-- 修复时会使用基本文件名；若其他扩展使用特定下载子目录，可能出现保存路径冲突或改变。
+- 安全的相对下载路径会尽量保留子目录；若 Chrome 提供绝对系统路径，由于无法可靠确定默认下载根目录，修复后可能改存到默认下载目录根部。
 - 若同时安装其他重命名下载文件的扩展，可能存在规则冲突。
 
 ### 隐私与权限
 
 使用 Chrome `downloads` 权限，以监听下载文件名的确定过程。此版本没有网络请求逻辑，不上传文件，也不读取文件内部内容。
 
+### 开发与测试
+
+安装 Node.js 22 或以上后，在仓库根目录执行 `node --test tests/*.test.cjs`。测试模拟 Chrome 下载文件名事件，不代表真实浏览器的端到端测试。GitHub Actions 在提交和 PR 时自动运行。
+
 ### 项目结构
 
 ```text
 background.js                Chrome download filename listener
+tests/background.test.cjs    Mocked download filename regression tests
+.github/workflows/tests.yml  GitHub Actions CI
 manifest.json                Manifest V3 extension metadata
 README.md                    GitHub project documentation
 README_安装与说明.txt            Chinese installation guide
@@ -52,7 +60,7 @@ README_安装与说明.txt            Chinese installation guide
 
 ### 已知事项
 
-本项目针对特定下载命名问题提供客户端解决办法，**不代表 Chrome、ChatGPT 或 GPT-6 存在已被官方确认的特定故障**。尚需在不同浏览器版本与下载来源上进行实际兼容性测试。
+本项目针对特定下载命名问题提供客户端解决办法，**不代表 Chrome、ChatGPT 或 GPT-6 存在已被官方确认的特定故障**。已提供 Node.js 模拟测试与 GitHub Actions；仍需在不同 Chrome 版本、下载来源、下载目录设置和其他扩展组合下进行实际兼容性测试。
 
 ## English
 
@@ -64,8 +72,8 @@ Some downloads may preserve a UTF-8 URL-encoded filename rather than decoding it
 
 **Permissions and privacy:** Uses only the `downloads` permission; no network requests or file-content access are implemented.
 
-**Status:** Community workaround; not an official OpenAI or Google product. Browser-specific behavior has not been comprehensively tested.
+**Status:** Community workaround; not an official OpenAI or Google product. Automated Node.js mock tests are included; live Chrome/browser compatibility has not been comprehensively tested.
 
 ## License
 
-See the repository's `LICENSE` file if the maintainer chooses to add an open-source license. Publishing code without a license does not automatically grant permission to reuse it.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
